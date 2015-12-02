@@ -1,5 +1,5 @@
-console.info([
-  '=========================================',
-  '*** FantasticBoxCo is broken :(       ***',
-  '=========================================',
-].join("\n"));
+var fantasticBoxCo = angular.module('fantasticBoxCo', [])
+
+.run(['$anchorScroll', function($anchorScroll) {
+  $anchorScroll.yOffset = 65;
+}])
