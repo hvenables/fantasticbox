@@ -32,6 +32,7 @@ describe('fantasticBoxCoController', function() {
       ctrl.length = 10;
       ctrl.quantity = 10;
       ctrl.cardboard = 'A - £0.20m²';
+      ctrl.print = '2-color - £0.10m²';
       ctrl.handles = 'Handles - £0.10 per box';
       ctrl.reinforced = 'Reinforced - £0.05 per box';
     });
@@ -44,8 +45,12 @@ describe('fantasticBoxCoController', function() {
       expect(ctrl.calculateCardboardCost()).toEqual(1200);
     });
 
-    it('can calculate print cost and wont apply discount', function() {
-      ctrl.print = '2-color - £0.10m²';
+    it('won\'t calculate cost if invalid input', function() {
+      ctrl.cardboard = 'C - £0.05m²';
+      expect(ctrl.cardboardErrorCheck()).toBeTruthy
+    });
+
+    it('can calculate print cost and won\'t apply discount', function() {
       expect(ctrl.discount).toBeFalsy;
       expect(ctrl.calculatePrintCost()).toEqual(600);
     })
@@ -65,7 +70,6 @@ describe('fantasticBoxCoController', function() {
     });
 
     it('can calculate total cost', function() {
-      ctrl.print = '2-color - £0.10m²';
       ctrl.calculateTotalCost();
       expect(ctrl.totalCost).toEqual(1801.5);
     });

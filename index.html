@@ -10,11 +10,18 @@
   <link rel="stylesheet" media="all" href="css/application.css">
   <link href='https://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" href="favicon.ico">
+  <script src="js/optionList.json"></script>
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="js/application.js"></script>
+  <script src="js/factories/optionFactory.js"></script>
   <script src="js/controllers/fantasticBoxCoController.js"></script>
   <script src="js/sidebar.js"></script>
+  <style>
+    .disabled-class {
+      background-color: green; !important
+    }
+  </style>
 </head>
 <body ng-controller="fantasticBoxCoController as fantasticBoxCtrl">
 
@@ -28,7 +35,7 @@
         <ul class="progress">
           <li>
           <a ng-click="fantasticBoxCtrl.gotoAnchor(1)" class="step step-1"
-              ng-class="fantasticBoxCtrl.active === 1 ? 'is-active' : ''">
+            ng-class="fantasticBoxCtrl.active === 1 ? 'is-active' : ''">
               <div class="step-number">1</div>
               <h3 class="step-heading">Dimensions &amp; Quantity</h3>
               <dl>
@@ -45,7 +52,7 @@
           </li>
           <li>
           <a ng-click="fantasticBoxCtrl.gotoAnchor(2)" class="step step-2"
-          ng-show="fantasticBoxCtrl.quantity"
+          ng-hide="areaForm.$invalid"
             ng-class="fantasticBoxCtrl.active === 2 ? 'is-active' : ''">
               <div class="step-number">2</div>
               <h3 class="step-heading">Cardboard Grade</h3>
@@ -54,7 +61,8 @@
           </li>
           <li>
           <a ng-click="fantasticBoxCtrl.gotoAnchor(3)" class="step step-3"
-            ng-show="fantasticBoxCtrl.cardboard"
+            ng-hide="!fantasticBoxCtrl.cardboard ||
+            fantasticBoxCtrl.cardboardErrorCheck()"
             ng-class="fantasticBoxCtrl.active === 3 ? 'is-active' : ''">
               <div class="step-number">3</div>
               <h3 class="step-heading">Print Quality</h3>
@@ -67,8 +75,12 @@
             ng-class="fantasticBoxCtrl.active === 4 ? 'is-active' : ''">
               <div class="step-number">4</div>
               <h3 class="step-heading">Optional Extras</h3>
-              <span class="step-value">{{ fantasticBoxCtrl.handles }}<br>
-                {{ fantasticBoxCtrl.reinforced }}</span>
+              <span class="step-value">
+                <span ng-show="fantasticBoxCtrl.handles">
+                  {{ fantasticBoxCtrl.handles }}<br></span>
+                <span ng-show="fantasticBoxCtrl.reinforced">
+                  {{ fantasticBoxCtrl.reinforced }}</span>
+                </span>
             </a>
           </li>
           <li>
@@ -86,99 +98,122 @@
         <div id="step-1" class="content-step">
           <h2>Step 1 - Dimensions &amp; Quantity</h2>
 
+        <div ng-repeat="cardboard in fantasticBoxCtrl.optionList.cardboard">
+          <p>{{ cardboard.name }}</p>
+          <p>{{ cardboard.price }}</p>
+        </div>
+
           <p class="intro">
             Enter the width, height, length and quantity of the box(es) you require.
           </p>
+          <form name="areaForm" ng-submit="fantasticBoxCtrl.calculateArea();
+              fantasticBoxCtrl.gotoAnchor(2)">
+            <div class="form-row">
+              <label for="width">Width:</label>
+              <input ng-model="fantasticBoxCtrl.width" type="number" name="width"
+              id="width" value="0" min="0.01" step="0.01" required
+              ng-change="fantasticBoxCtrl.calculateTotalCost()">
+            </div>
 
-          <div class="form-row">
-            <label for="width">Width:</label>
-            <input ng-model="fantasticBoxCtrl.width" type="number" name="width"
-            id="width" value="0" min="0" step="0.01">
-          </div>
+            <div class="form-row">
+              <label for="height">Height:</label>
+              <input ng-model="fantasticBoxCtrl.height" type="number" name="height"
+              id="height" value="0" min="0.01" step="0.01" required
+              ng-change="fantasticBoxCtrl.calculateTotalCost()">
+            </div>
 
-          <div class="form-row">
-            <label for="height">Height:</label>
-            <input ng-model="fantasticBoxCtrl.height" type="number" name="height"
-            id="height" value="0" min="0" step="0.01">
-          </div>
+            <div class="form-row">
+              <label for="length">Length:</label>
+              <input ng-model="fantasticBoxCtrl.length" type="number" name="length"
+              id="length" value="0" min="0.01" step="0.01" required
+              ng-change="fantasticBoxCtrl.calculateTotalCost()">
+            </div>
 
-          <div class="form-row">
-            <label for="length">Length:</label>
-            <input ng-model="fantasticBoxCtrl.length" type="number" name="length"
-            id="length" value="0" min="0" step="0.01">
-          </div>
+            <div class="form-row">
+              <label for="quantity">Quantity:</label>
+              <input ng-model="fantasticBoxCtrl.quantity" type="number" name="quantity"
+              id="quantity" value="0" min="1" step="1" required
+              ng-change="fantasticBoxCtrl.calculateTotalCost()">
+            </div>
 
-          <div class="form-row">
-            <label for="quantity">Quantity:</label>
-            <input ng-model="fantasticBoxCtrl.quantity" type="number" name="quantity"
-            id="quantity" value="0" min="0" step="1">
-          </div>
-
-          <div class="form-actions">
-            <button type="button" ng-click="fantasticBoxCtrl.calculateArea();
-              fantasticBoxCtrl.gotoAnchor(2)" class="btn btn-primary btn-next">
-              Next
-            </button>
-          </div>
+            <div class="form-actions">
+              <button id="areaButton" type="submit" class="btn btn-primary btn-next"
+                ng-disabled="myForm.$invalid">
+                Next
+              </button>
+            </div>
+          </form>
         </div>
 
 
+
         <div id="step-2" class="content-step"
-          ng-show="fantasticBoxCtrl.quantity">
+          ng-hide="areaForm.$invalid">
           <h2>Step 2 - Cardboard Grade</h2>
 
           <p class="intro">
             <strong>FantasticBoxCo</strong> offer a variety of grades of cardboard, each altering the price per m<sup>2</sup>:
-​          </p>
+            ​          </p>
+          <span ng-show="fantasticBoxCtrl.cardboardErrorCheck()">
+            C grade can only be selected if box is smaller than
+            2m<sup>2<sup>. Please either reduce the size of the boxes or select
+            another type of cardboard.
+          </span>
+          <form name="cardboard">
+            <ol class="btn-radios-list">
+              <li>
+                <label>
+                  <input type="radio" ng-model='fantasticBoxCtrl.cardboard'
+                  ng-change="fantasticBoxCtrl.calculateTotalCost();"
+                  name="cardboard-grade" value="A - £0.20m²">
+                  <span class="btn btn-radio">
+                    A Grade<br>&pound;0.20 m<sup>2</sup>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="radio" ng-model='fantasticBoxCtrl.cardboard'
+                  ng-change="fantasticBoxCtrl.calculateTotalCost();"
+                  name="cardboard-grade" value="B - £0.10m²">
+                  <span class="btn btn-radio">
+                    B Grade<br>&pound;0.10 m<sup>2</sup>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="radio" ng-model='fantasticBoxCtrl.cardboard'
+                  ng-change="fantasticBoxCtrl.calculateTotalCost();"
+                  name="cardboard-grade" value="C - £0.05m²">
+                  <span class="btn btn-radio"
+                  ng-class="fantasticBoxCtrl.calculateArea() > 2 ?
+                  'disabled-class' : ''">
+                    C Grade<br>&pound;0.05 m<sup>2</sup>
+                  </span>
+                </label>
+              </li>
+            </ol>
 
-          <ol class="btn-radios-list">
-            <li>
-              <label>
-                <input type="radio" ng-model='fantasticBoxCtrl.cardboard'
-                ng-change="fantasticBoxCtrl.calculateTotalCost();"
-                name="cardboard-grade" value="A - £0.20m²">
-                <span class="btn btn-radio">
-                  A Grade<br>&pound;0.20 m<sup>2</sup>
-                </span>
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="radio" ng-model='fantasticBoxCtrl.cardboard'
-                ng-change="fantasticBoxCtrl.calculateTotalCost();"
-                name="cardboard-grade" value="B - £0.10m²">
-                <span class="btn btn-radio">
-                  B Grade<br>&pound;0.10 m<sup>2</sup>
-                </span>
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="radio" ng-model='fantasticBoxCtrl.cardboard'
-                ng-change="fantasticBoxCtrl.calculateTotalCost();"
-                name="cardboard-grade" value="C - £0.05m²">
-                <span class="btn btn-radio">
-                  C Grade<br>&pound;0.05 m<sup>2</sup>
-                </span>
-              </label>
-            </li>
-          </ol>
-
-          <div class="form-actions">
-            <button type="button" ng-click="fantasticBoxCtrl.gotoAnchor(1)" class="btn
-              btn-back">
-              back
-            </button>
-            <button type="button" ng-click="fantasticBoxCtrl.gotoAnchor(3)"
-              class="btn btn-primary btn-next">
-              Next
-            </button>
-          </div>
+            <div class="form-actions">
+              <button type="button" ng-click="fantasticBoxCtrl.gotoAnchor(1)" class="btn
+                btn-back">
+                back
+              </button>
+              <button type="submit" ng-click="fantasticBoxCtrl.gotoAnchor(3)"
+                ng-disabled="!fantasticBoxCtrl.cardboard ||
+                fantasticBoxCtrl.cardboardErrorCheck()"
+                id="printButton" class="btn btn-primary btn-next">
+                Next
+              </button>
+            </div>
+          </form>
         </div>
 
 
         <div id="step-3" class="content-step"
-          ng-show="fantasticBoxCtrl.cardboard">
+          ng-hide="!fantasticBoxCtrl.cardboard ||
+          fantasticBoxCtrl.cardboardErrorCheck()">
           <h2>Step 3 - Print Quality</h2>
 
           <p class="intro">
@@ -244,7 +279,8 @@
               back
             </button>
             <button type="button" ng-click="fantasticBoxCtrl.gotoAnchor(4)"
-              class="btn btn-primary btn-next">
+              ng-disabled="!fantasticBoxCtrl.print" class="btn btn-primary
+              btn-next" id="qualityButton">
               Next
             </button>
           </div>
@@ -258,8 +294,8 @@
             <li>
               <label>
                 <input type="checkbox" ng-model="fantasticBoxCtrl.handles"
-                ng-true-value="'Handles - £0.10 per box'" ng-false-value="null"
-                name="optional-extras"
+                ng-true-value="'Handles - £0.10 per box'"
+                ng-false-value="undefined" name="optional-extras"
                 ng-change="fantasticBoxCtrl.calculateTotalCost()">
                 <span class="btn btn-radio">
                   Handles<br>&pound;0.10 per box
@@ -269,9 +305,9 @@
             <li>
               <label>
                 <input type="checkbox" ng-model="fantasticBoxCtrl.reinforced"
-                ng-true-value="'Reinforced - £0.05 per box'"
-                ng-false-value="undefined"
-                ng-change="fantasticBoxCtrl.calculateTotalCost()" name="optional-extras">
+                ng-true-value="'Reinforce - £0.05 per box'" ng-false-value="undefined"
+                ng-change="fantasticBoxCtrl.calculateTotalCost()" name="optional-extras"
+                ng-disabled="fantasticBoxCtrl.cardboard !== 'A - £0.20m²'">
                 <span class="btn btn-radio">
                   Reinforced bottom<br>&pound;0.05 per box<br>
                   <small>(only available with grade A cardboard)</small>
@@ -285,7 +321,7 @@
               btn-back">
               back
             </buttton>
-            <button type="button"
+            <button type="button" id="extrasButton"
               ng-click="fantasticBoxCtrl.gotoAnchor('total-cost')" class="btn
               btn-primary btn-next">
               Finish
@@ -294,34 +330,34 @@
         </div>
 
 
-        <div id="step-total-cost" ng-show="fantasticBoxCtrl.totalCost" class="content-step">
+        <div id="step-total-cost" ng-show="fantasticBoxCtrl.print" class="content-step">
           <h2>Total Cost</h2>
 
           <dl class="breakdown">
             <dt>Dimensions &amp; Quantity:</dt>
-            <dd>{{fantasticBoxCtrl.quantity}} &times;
+            <dd id='dimensions'>{{fantasticBoxCtrl.quantity}} &times;
             {{ fantasticBoxCtrl.width }}m(W)&times;
             {{ fantasticBoxCtrl.height }}m(H)&times;
             {{ fantasticBoxCtrl.length }}m(L)</dd>
 
             <dt>Cardboard Grade:</dt>
-            <dd>{{ fantasticBoxCtrl.cardboard }}</dd>
+            <dd id="cardboard-grade">{{ fantasticBoxCtrl.cardboard }}</dd>
 
             <dt>Print Quality:</dt>
-            <dd>{{ fantasticBoxCtrl.print }}</dd>
+            <dd id="print-quality">{{ fantasticBoxCtrl.print }}</dd>
 
             <dt>Optional Extras:</dt>
             <dd>
               <ol>
-                <li ng-show="fantasticBoxCtrl.handles">
+                <li id="handles" ng-show="fantasticBoxCtrl.handles">
                 {{ fantasticBoxCtrl.handles }}</li>
-                <li ng-show="fantasticBoxCtrl.reinforced">
+                <li id="reinforced" ng-show="fantasticBoxCtrl.reinforced">
                 {{ fantasticBoxCtrl.reinforced }}</li>
               </ol>
             </dd>
 
             <dt>Total Cost:</dt>
-            <dd>{{ fantasticBoxCtrl.totalCost | currency:"£" }}</dd>
+            <dd id="total-cost">{{ fantasticBoxCtrl.totalCost | currency:"£" }}</dd>
           </dl>
         </div>
 

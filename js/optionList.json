@@ -1,0 +1,12 @@
+{
+  "cardboard": [{
+    "name": "A",
+    "price": 0.20
+  }, {
+    "name": "B",
+    "price": 0.10
+  }, {
+    "name": "C",
+    "price": 0.05
+  }]
+}
