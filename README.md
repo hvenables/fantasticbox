@@ -1,4 +1,4 @@
-# fantasticbox
+# Fantastic Box Co
 
 #### Tools Used
 
