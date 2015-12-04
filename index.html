@@ -29,8 +29,8 @@
         <aside id="sidebar">
           <ul class="progress">
             <li>
-            <a ng-click="fantasticBoxCtrl.gotoAnchor(1)" class="step step-1"
-              ng-class="fantasticBoxCtrl.active === 1 ? 'is-active' : ''">
+              <a ng-click="fantasticBoxCtrl.gotoAnchor(1)" class="step step-1"
+                ng-class="fantasticBoxCtrl.active === 1 ? 'is-active' : ''">
                 <div class="step-number">1</div>
                 <h3 class="step-heading">Dimensions &amp; Quantity</h3>
                 <dl>
@@ -46,28 +46,28 @@
               </a>
             </li>
             <li>
-            <a ng-click="fantasticBoxCtrl.gotoAnchor(2)" class="step step-2"
-            ng-hide="areaForm.$invalid"
-              ng-class="fantasticBoxCtrl.active === 2 ? 'is-active' : ''">
+              <a ng-click="fantasticBoxCtrl.gotoAnchor(2)" class="step step-2"
+                ng-hide="areaForm.$invalid"
+                ng-class="fantasticBoxCtrl.active === 2 ? 'is-active' : ''">
                 <div class="step-number">2</div>
                 <h3 class="step-heading">Cardboard Grade</h3>
                 <span class="step-value">{{ fantasticBoxCtrl.cardboard }}</span>
               </a>
             </li>
             <li>
-            <a ng-click="fantasticBoxCtrl.gotoAnchor(3)" class="step step-3"
-              ng-hide="!fantasticBoxCtrl.cardboard ||
-              fantasticBoxCtrl.cardboardErrorCheck()"
-              ng-class="fantasticBoxCtrl.active === 3 ? 'is-active' : ''">
+              <a ng-click="fantasticBoxCtrl.gotoAnchor(3)" class="step step-3"
+                ng-hide="!fantasticBoxCtrl.cardboard ||
+                fantasticBoxCtrl.cardboardErrorCheck()"
+                ng-class="fantasticBoxCtrl.active === 3 ? 'is-active' : ''">
                 <div class="step-number">3</div>
                 <h3 class="step-heading">Print Quality</h3>
                 <span class="step-value">{{ fantasticBoxCtrl.print }}</span>
               </a>
             </li>
             <li>
-            <a ng-click="fantasticBoxCtrl.gotoAnchor(4)" class="step step-4"
-              ng-show="fantasticBoxCtrl.print"
-              ng-class="fantasticBoxCtrl.active === 4 ? 'is-active' : ''">
+              <a ng-click="fantasticBoxCtrl.gotoAnchor(4)" class="step step-4"
+                ng-show="fantasticBoxCtrl.print"
+                ng-class="fantasticBoxCtrl.active === 4 ? 'is-active' : ''">
                 <div class="step-number">4</div>
                 <h3 class="step-heading">Optional Extras</h3>
                 <span class="step-value">
@@ -79,7 +79,7 @@
               </a>
             </li>
             <li>
-            <a ng-click="fantasticBoxCtrl.gotoAnchor('total-cost')" class="step step-total-cost">
+              <a ng-click="fantasticBoxCtrl.gotoAnchor('total-cost')" class="step step-total-cost">
                 <h3 class="step-total-cost-heading">Total Cost</h3>
                 <div class="step-total-cost-value">{{ fantasticBoxCtrl.totalCost |
                   currency:"£"}}</div>
