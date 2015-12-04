@@ -33,8 +33,8 @@ describe('fantasticBoxCoController', function() {
       ctrl.quantity = 10;
       ctrl.cardboard = 'A - £0.20m²';
       ctrl.print = '2-color - £0.10m²';
-      ctrl.handles = 'Handles - £0.10 per box';
-      ctrl.reinforced = 'Reinforced - £0.05 per box';
+      ctrl.extra.Handles = 'Handles - £0.10 per box';
+      ctrl.extra.Reinforce = 'Reinforced - £0.05 per box';
     });
 
     it('can calculate area of box', function() {

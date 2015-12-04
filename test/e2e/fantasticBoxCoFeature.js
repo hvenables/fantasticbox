@@ -2,6 +2,7 @@ describe('fantasticBoxCo', function() {
 
   var cardboard = element.all(by.model('fantasticBoxCtrl.cardboard'));
   var print = element.all(by.model('fantasticBoxCtrl.print'));
+  var extras = element.all(by.repeater('extras in fantasticBoxCtrl.optionList.extras'))
 
   beforeEach(function() {
     browser.get('http://localhost:8080');
@@ -21,11 +22,11 @@ describe('fantasticBoxCo', function() {
     element(by.id('printButton')).click();
     print.get(0).click();
     element(by.id('qualityButton')).click();
-    element(by.model('fantasticBoxCtrl.handles')).click();
+    extras.get(0).element(by.id('0')).click();
     element(by.id('extrasButton')).click();
     expect(element(by.id('dimensions')).getText()).toEqual("10 × 10m(W)× 10m(H)× 10m(L)");
     expect(element(by.id('cardboard-grade')).getText()).toEqual("A - £0.20m²");
-    expect(element(by.id('print-quality')).getText()).toEqual("3-color - £0.20m²");
+    expect(element(by.id('print-quality')).getText()).toEqual("3-colour - £0.20m²");
     expect(element(by.id('handles')).getText()).toEqual("Handles - £0.10 per box");
     expect(element(by.id('total-cost')).getText()).toEqual("£2,401.00");
   });

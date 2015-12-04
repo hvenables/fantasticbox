@@ -71,9 +71,9 @@
                 <div class="step-number">4</div>
                 <h3 class="step-heading">Optional Extras</h3>
                 <span class="step-value">
-                  <span ng-show="fantasticBoxCtrl.handles">
+                  <span ng-show="fantasticBoxCtrl.extra.Handles">
                     {{ fantasticBoxCtrl.extra.handles }}<br></span>
-                  <span ng-show="fantasticBoxCtrl.reinforced">
+                  <span ng-show="fantasticBoxCtrl.extra.Reinforce">
                     {{ fantasticBoxCtrl.extra.reinforced }}</span>
                   </span>
               </a>
@@ -238,7 +238,7 @@
             <ol class="btn-radios-list">
               <li ng-repeat="extras in fantasticBoxCtrl.optionList.extras">
                 <label>
-                  <input type="checkbox" ng-model="fantasticBoxCtrl.extra[extras.name]"
+                  <input id="{{$index}}" type="checkbox" ng-model="fantasticBoxCtrl.extra[extras.name]"
                   ng-true-value="'{{ extras.name }} - {{ extras.price |
                   currency:'£' }} per box'"
                   ng-false-value="undefined" name="optional-extras"
@@ -286,9 +286,9 @@
               <dt>Optional Extras:</dt>
               <dd>
                 <ol>
-                  <li id="handles" ng-show="fantasticBoxCtrl.handles">
+                  <li id="handles" ng-show="fantasticBoxCtrl.extra.Handles">
                   {{ fantasticBoxCtrl.extra.Handles }}</li>
-                  <li id="reinforced" ng-show="fantasticBoxCtrl.reinforced">
+                  <li id="reinforced" ng-show="fantasticBoxCtrl.extra.Reinforce">
                   {{ fantasticBoxCtrl.extra.Reinforce }}</li>
                 </ol>
               </dd>
