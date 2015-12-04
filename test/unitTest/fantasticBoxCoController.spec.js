@@ -47,13 +47,13 @@ describe('fantasticBoxCoController', function() {
 
     it('won\'t calculate cost if invalid input', function() {
       ctrl.cardboard = 'C - £0.05m²';
-      expect(ctrl.cardboardErrorCheck()).toBeTruthy
+      expect(ctrl.cardboardErrorCheck()).toBeTruthy;
     });
 
     it('can calculate print cost and won\'t apply discount', function() {
       expect(ctrl.discount).toBeFalsy;
       expect(ctrl.calculatePrintCost()).toEqual(600);
-    })
+    });
 
     it('can add a discount if branding selected', function() {
       ctrl.print = 'FantasticBoxCo-branding';
@@ -63,6 +63,11 @@ describe('fantasticBoxCoController', function() {
 
     it('can calculate handle cost', function() {
       expect(ctrl.calculateHandleCost()).toEqual(1);
+    });
+
+    it('won\'t allow you to reinforce if not grade A cardboard', function() {
+      ctrl.cardboard = 'C - £0.05m²'
+      expect(ctrl.reinforcedErrorCheck()).toBeTruthy;
     });
 
     it('can calculate reinforced cost', function() {

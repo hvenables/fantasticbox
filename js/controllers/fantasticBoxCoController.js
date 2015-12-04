@@ -79,7 +79,6 @@ fantasticBoxCo.controller('fantasticBoxCoController', ['optionList', '$location'
     self.totalCost += self.calculatePrintCost();
     self.totalCost += self.calculateHandleCost();
     self.totalCost += self.calculateReinforcedCost();
-    console.log(self.extra.Reinforce)
     if(self.discount) {
       self.totalCost = self.totalCost * 0.95;
     }
