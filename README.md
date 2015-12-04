@@ -37,11 +37,3 @@ Run the following commands from terminal to run the tests
 1. `webdriver-manager start`  
 2. `http-server`  
 3. `protractor test/e2e/conf.js`  
-
-**Test File** | **Location**
---- | ---
-**Karma Config** | test/karma.conf.js
-**Karna Controller Test File** | test/unit/shopController.spec.js
-**Karma Factory Test File** | test/unit/shopController.spec.js
-**Protractor Config** | test/protractor.conf.js
-**Protractor Feature Tests** | test/e2e/ShopFeatureSpec.js
