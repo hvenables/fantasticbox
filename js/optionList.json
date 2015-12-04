@@ -8,5 +8,25 @@
   }, {
     "name": "C",
     "price": 0.05
+  }],
+  "print": [{
+    "name": "3-colour",
+    "price": 0.20
+  }, {
+    "name": "2-colour",
+    "price": 0.10
+  }, {
+    "name": "Black",
+    "price": 0.05
+  }, {
+    "name": "No-printing",
+    "price": 0.00
+  }],
+  "extras": [{
+    "name": "Handles",
+    "price": 0.10
+  }, {
+    "name": "Reinforce",
+    "price": 0.05
   }]
 }
