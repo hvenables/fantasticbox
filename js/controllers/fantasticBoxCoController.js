@@ -11,6 +11,8 @@ fantasticBoxCo.controller('fantasticBoxCoController', ['optionList', '$location'
 
   self.active = 1;
 
+  self.extra = {};
+
   self.getOptions = (function() {
     optionList.then(function(response){
       self.optionList = response.data;
@@ -18,7 +20,6 @@ fantasticBoxCo.controller('fantasticBoxCoController', ['optionList', '$location'
   })();
 
   self.calculateArea = function() {
-    console.log(self.optionList)
     var area = (self.width * self.height) * 2
     area += (self.width * self.length) * 2
     area += (self.length * self.height) * 2
@@ -52,25 +53,33 @@ fantasticBoxCo.controller('fantasticBoxCoController', ['optionList', '$location'
   };
 
   self.calculateHandleCost = function() {
-    if(self.handles === undefined) { return 0 };
-    var handleCost = parseFloat(self.handles.substr(-12, 4));
+    if(self.extra.Handles === undefined) { return 0 };
+    var handleCost = parseFloat(self.extra.Handles.substr(-12, 4));
     handleCost = self.quantity * handleCost;
     return handleCost;
   };
 
   self.calculateReinforcedCost = function() {
-    if(self.reinforced === undefined) { return 0 };
-    var reinforcedCost = parseFloat(self.reinforced.substr(-12, 4));
+    if(self.extra.Reinforce === undefined) { return 0 };
+    var reinforcedCost = parseFloat(self.extra.Reinforce.substr(-12, 4));
     reinforcedCost = self.quantity * reinforcedCost;
     return reinforcedCost;
   };
 
+  self.reinforcedErrorCheck = function() {
+    if(self.cardboard !== 'A - £0.20m²' && self.extra.Reinforce === 'Reinforce - £0.05 per box') {
+      return true;
+    }
+  }
+
   self.calculateTotalCost = function() {
-    if(self.cardboardErrorCheck()) { return self.totalCost = "Error"}
+    if(self.cardboardErrorCheck()) { return self.totalCost = "Error" }
+    if(self.reinforcedErrorCheck()) { return self.totalCost = "Error" }
     self.totalCost = self.calculateCardboardCost();
     self.totalCost += self.calculatePrintCost();
     self.totalCost += self.calculateHandleCost();
     self.totalCost += self.calculateReinforcedCost();
+    console.log(self.extra.Reinforce)
     if(self.discount) {
       self.totalCost = self.totalCost * 0.95;
     }
